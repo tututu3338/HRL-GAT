@@ -5,7 +5,6 @@ import torch.nn as nn
 class ActorNetwork(nn.Module):
     """Actor network that scores each candidate node given composite action features.
     
-    Paper Eq.13: f_i^(t) = [z_i || z̄_St || δ_i^(t) || ψ_i]
     Output: scalar score per candidate node.
     """
     def __init__(self, input_dim, hidden_dim=128):
