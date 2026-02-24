@@ -6,8 +6,6 @@ from torch_geometric.nn import GATConv
 
 class GATEncoder(nn.Module):
     """Multi-layer GAT encoder with residual connections and batch normalization.
-    
-    Paper Section 4.2: Node Embedding with GAT (Eq.3-9)
     """
     def __init__(self, in_dim, hidden_dim, out_dim, device, heads=8):
         super(GATEncoder, self).__init__()
@@ -58,7 +56,7 @@ class GATEncoder(nn.Module):
         return out
 
     def pretrain(self, features, edge_index, epochs, lambda_smooth=0.1):
-        """Contrastive + smoothing pretraining (Paper Eq.12).
+        """Contrastive + smoothing pretraining.
         
         L_pre = L_con + λ_s · L_smooth
         """
@@ -91,7 +89,7 @@ class GATEncoder(nn.Module):
             scores = torch.cat([pos_score, neg_score])
             loss_con = F.binary_cross_entropy_with_logits(scores, labels)
             
-            # Smoothing loss L_smooth (Paper Eq.11)
+            # Smoothing loss L_smooth 
             # L_smooth = (1/|E|) Σ_{(i,j)∈E} w_ij · ||z_i - z_j||²
             # where w_ij = p_ij = 1/d_j (WIC edge probability)
             z_src = encoded[pos_edges[0]]
@@ -101,7 +99,7 @@ class GATEncoder(nn.Module):
             edge_weights = 1.0 / node_degrees[pos_edges[1]]
             loss_smooth = (edge_weights * sq_diff).mean()
             
-            # Combined loss (Paper Eq.12)
+            # Combined loss
             loss = loss_con + lambda_smooth * loss_smooth
             
             loss.backward()
