@@ -7,9 +7,7 @@ from tqdm import tqdm
 
 class InfluenceEnvironment:
     """WIC influence maximization environment with ECMR candidate screening.
-    
-    Paper Section 3.1: WIC Diffusion Model
-    Paper Section 4.3: Candidate Seed Set Construction via ECMR
+   
     """
     def __init__(self, G, node_features):
         self.G = G
@@ -18,7 +16,7 @@ class InfluenceEnvironment:
         self.degrees = dict(G.degree())
         self.max_degree = max(self.degrees.values()) if self.degrees else 1
         
-        # WIC edge probabilities: p_uv = 1/d_v (Paper Eq.1)
+        # WIC edge probabilities: p_uv = 1/d_v 
         self.edge_probs = {}
         for u, v in G.edges():
             prob_uv = 1.0 / max(G.degree(v), 1)
@@ -43,16 +41,16 @@ class InfluenceEnvironment:
         self.candidate_seeds = self.build_candidate_seed_set()
             
     def calculate_ecmr(self, node):
-        """Compute ECMR score (Paper Eq.14-16).
+        """Compute ECMR score.
         
         ECMR(v) = (1 + I_1(v) + I_2(v)) · (d_v/d_max + (1 - C_v))
         """
-        # I_1(v): one-hop expected influence (Paper Eq.14)
+        # I_1(v): one-hop expected influence 
         i_one = 0.0
         for neighbor in self.G.neighbors(node):
             i_one += self.edge_probs.get((node, neighbor), 0)
         
-        # I_2(v): two-hop expected influence with η=0.5 (Paper Eq.15)
+        # I_2(v): two-hop expected influence with η=0.5 
         i_two = 0.0
         for neighbor in self.G.neighbors(node):
             p_vu = self.edge_probs.get((node, neighbor), 0)
@@ -61,7 +59,7 @@ class InfluenceEnvironment:
                     p_uw = self.edge_probs.get((neighbor, second_neighbor), 0)
                     i_two += 0.5 * p_vu * p_uw
         
-        # ECMR (Paper Eq.16) — equal weights for degree and clustering factors
+        # ECMR — equal weights for degree and clustering factors
         degree_factor = self.degrees[node] / self.max_degree
         cluster_coef = self.clustering_coeffs[node]
         ecmr = (1 + i_one + i_two) * (degree_factor + (1 - cluster_coef))
@@ -148,7 +146,7 @@ class InfluenceEnvironment:
         return score
 
     def get_structural_features(self, node):
-        """Get static structural features ψ_i for a node (Paper Eq.13).
+        """Get static structural features ψ_i for a node.
         
         Returns [degree_norm, clustering_coef, ecmr_norm]
         """
