@@ -1,11 +1,8 @@
-<<<<<<< HEAD
-# HRL-GAT
-
-基于图注意力网络与强化学习的影响力最大化框架（Hybrid Reinforcement Learning with GAT for Influence Maximization）。
+HRL-GAT基于图注意力网络与强化学习的影响力最大化框架（Hybrid Reinforcement Learning with GAT for Influence Maximization）。
 
 在 WIC（Weighted Independent Cascade）扩散模型下，通过 GAT 编码图结构、ECMR 筛选候选种子集、PPO 智能体进行序贯种子选取。
 
-## 项目结构
+项目结构
 
 ```
 HRL-GAT/
@@ -25,19 +22,14 @@ HRL-GAT/
 └── requirements.txt
 ```
 
-## 快速开始
-
-```bash
-pip install -r requirements.txt
-
-# 训练（k = 5, 10, ..., 50）
+训练（k = 5, 10, ..., 50）
 python train.py
 
-# 测试
+测试
 python test.py
 ```
 
-## 数据格式
+数据格式
 
 在 `data/` 下放置边表 CSV 文件，两列分别为源节点和目标节点 ID：
 
@@ -48,7 +40,3 @@ source,target
 1,3
 ```
 
-修改 `utils/config.py` 中的 `data_path` 指向你的数据集即可。
-=======
-# -HRL-GAT
->>>>>>> a68f58500747ca4a2723c73bcbcac0ce75f9b123
