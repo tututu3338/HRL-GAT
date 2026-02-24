@@ -23,14 +23,17 @@ HRL-GAT/
 ```
 
 训练（k = 5, 10, ..., 50）
+```
 python train.py
+```
 
 测试
+```
 python test.py
-
+```
 
 数据格式
-
+```
 在 `data/` 下放置边表 CSV 文件，两列分别为源节点和目标节点 ID：
 
 
@@ -39,4 +42,4 @@ source,target
 0,2
 1,3
 
-
+```
