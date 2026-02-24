@@ -6,13 +6,13 @@ from models.policy import ActorNetwork, CriticNetwork
 
 
 class PPOAgent:
-    """PPO Agent for sequential seed selection (Paper Section 4.4, Algorithm 4).
+    """PPO Agent for sequential seed selection
     
     Implements:
-    - Composite action features f_i = [z_i || z̄_St || δ_i || ψ_i] (Paper Eq.13)
-    - PPO clipped objective (Paper Eq.20)
-    - GAE advantage estimation (Paper Eq.21)
-    - Total loss with entropy regularization (Paper Eq.23)
+    - Composite action features f_i = [z_i || z̄_St || δ_i || ψ_i]
+    - PPO clipped objective 
+    - GAE advantage estimation
+    - Total loss with entropy regularization
     """
     def __init__(self, embedding_dim, n_nodes, device, cfg):
         self.device = device
@@ -42,7 +42,7 @@ class PPOAgent:
         self.ppo_epochs = getattr(cfg, 'ppo_epochs', 4)
 
     def build_composite_features(self, node_embeddings, valid_nodes, seed_set, env):
-        """Build composite action features (Paper Eq.13).
+        """Build composite action features.
         
         f_i^(t) = [z_i || z̄_St || δ_i^(t) || ψ_i]
         
@@ -131,7 +131,7 @@ class PPOAgent:
             return selected_node, log_prob, action_idx
 
     def compute_gae(self, values, rewards):
-        """Compute GAE advantages and target returns (Paper Eq.21).
+        """Compute GAE advantages and target returns .
         
         Returns = Advantages + Values (Paper: R̂_t = Â_t + V_φ(s_t))
         """
@@ -148,7 +148,7 @@ class PPOAgent:
     def update(self, trajectory):
         """PPO update with proper clipping, entropy bonus, consistent probabilities.
         
-        Paper Eq.20 (clipped objective) + Eq.22 (critic loss) + Eq.23 (total loss)
+       
         
         Args:
             trajectory: list of dicts with keys:
@@ -201,13 +201,13 @@ class PPOAgent:
                 new_log_prob = dist.log_prob(action_idx)
                 entropy = dist.entropy()
                 
-                # PPO clipped objective (Paper Eq.20)
+                # PPO clipped objective 
                 ratio = torch.exp(new_log_prob - old_log_probs[t])
                 surr1 = ratio * advantages[t]
                 surr2 = torch.clamp(ratio, 1 - self.clip_ratio, 1 + self.clip_ratio) * advantages[t]
                 policy_loss = -torch.min(surr1, surr2)
                 
-                # Critic loss (Paper Eq.22)
+                # Critic loss 
                 value_pred = self.critic(state_reprs[t].unsqueeze(0)).squeeze()
                 value_loss = F.mse_loss(value_pred, returns[t])
                 
