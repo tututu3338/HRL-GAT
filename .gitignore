@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Virtual environments
+venv/
+.env/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Model checkpoints and results
+checkpoints/
+results/
+*.pth
+*.pt
+
+# Data (add your own datasets)
+data/*.csv
+
+# OS
+.DS_Store
+Thumbs.db
